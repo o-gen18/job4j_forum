@@ -13,6 +13,7 @@
     <div class="header">
         <h4>Forum job4j</h4>
         <span style="font-size: 150%; color: blue">Logged in as : ${user.username}</span>
+        <span><a class="btn btn-outline-warning" href="<c:url value='/create'/>">Create a post</a></span>
         <a class="btn btn-outline-dark" href="<c:url value='/logout'/>" style="float: right; display: inline">Log out</a>
     </div>
     <div class="row">

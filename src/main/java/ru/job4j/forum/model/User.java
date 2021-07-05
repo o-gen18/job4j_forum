@@ -1,14 +1,21 @@
 package ru.job4j.forum.model;
 
+import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
 
+@Entity
+@Table(name = "users")
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String username;
     private String password;
     private String email;
     private boolean enabled;
+
+    @OneToMany(mappedBy = "author")
     private List<Post> posts;
 
     public static User of(String name) {

@@ -15,7 +15,7 @@
         <div class="card-body">
             <h5 class="card-title">${post.name}</h5>
             <h6 class="card-subtitle mb-2 text-muted">By: ${post.author.username}</h6>
-            <p class="card-text">${post.desc}</p>
+            <p class="card-text">${post.description}</p>
             <p class="card-text"><small class="text-muted">Posted: ${post.created.time}</small></p>
             <hr/>
             <table class="table">

@@ -11,23 +11,36 @@
 </head>
 <body>
 <div class="container-fluid">
-    <div class="card mx-auto" style="width: 50%">
-        <h2 class="h2 mx-auto" style="display: inline" align="center">Create a comment</h2>
+    <div class="card mx-auto border-0" style="width: 50%">
+        <h2 class="h2 mx-auto" style="display: inline" align="center">
+            <c:choose>
+                <c:when test="${empty post}">
+                    Create a post.
+                </c:when>
+                <c:otherwise>
+                    Edit the post.
+                </c:otherwise>
+            </c:choose>
+        </h2>
         <div class="card-body border border-primary rounded">
-            <form name="create post" action="<c:url value='/edit'/>" method="POST">
+            <form name="create post" action="<c:url value='/save'/>" method="POST">
                 <table class="table">
+                    <c:if test="${not empty post}">
+                        <input hidden name="id" value="<c:out value="${post.id}"/>">
+                    </c:if>
                     <tr>
                         <td>Post's name: </td>
-                        <td><input class="form-control" type="text" name="name"></td>
+                        <td><input class="form-control" type="text" name="name" value="<c:out value='${post.name}'/>"></td>
                     </tr>
                     <tr>
                         <td>Description: </td>
-                        <td><input class="form-control" type="text" name="desc"></td>
+                        <td>
+                            <textarea class="form-control" name="description"><c:out value='${post.description}'/></textarea>
+                        </td>
                     </tr>
                     <tr>
                         <td colspan="2">
                             <input class="btn btn-outline-primary" name="submit" type="submit" value="Submit">
-                            <a class="btn btn-outline-success" style="float: right" href="<c:url value='/reg'/>">Submit</a>
                         </td>
                     </tr>
                 </table>

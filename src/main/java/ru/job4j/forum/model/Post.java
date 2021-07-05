@@ -1,15 +1,33 @@
 package ru.job4j.forum.model;
 
+import javax.persistence.*;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
+@Entity
+@Table(name = "posts")
 public class Post {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private String name;
-    private String desc;
-    private Map<User, List<Comment>> comments = new ConcurrentHashMap<>();
+
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
+    @OneToMany
+    private List<Comment> comments;
+
+    @Temporal(TemporalType.TIMESTAMP)
     private Calendar created;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "USER_ID_FK"))
     private User author;
+
+    public Post() {
+        this.created = Calendar.getInstance();
+    }
 
     public static Post of(String name) {
         Post post = new Post();
@@ -18,14 +36,12 @@ public class Post {
         return post;
     }
 
-    public void addComment(User author, Comment comment) {
-        if (comments.containsKey(author)) {
-            comments.get(author).add(comment);
-        } else {
-            List<Comment> list = new ArrayList<>();
-            list.add(comment);
-            comments.put(author, list);
-        }
+    public void addComment(Comment comment) {
+        comments.add(comment);
+    }
+
+    public boolean removeComment(Comment comment) {
+        return comments.remove(comment);
     }
 
     public int getId() {
@@ -44,19 +60,19 @@ public class Post {
         this.name = name;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setDescription(String desc) {
+        this.description = desc;
     }
 
-    public Map<User, List<Comment>> getComments() {
+    public List<Comment> getComments() {
         return comments;
     }
 
-    public void setComments(Map<User, List<Comment>> comments) {
+    public void setComments(List<Comment> comments) {
         this.comments = comments;
     }
 
@@ -87,7 +103,7 @@ public class Post {
         Post post = (Post) o;
         return Objects.equals(name, post.name)
                 && id == post.id
-                && Objects.equals(desc, post.desc)
+                && Objects.equals(description, post.description)
                 && Objects.equals(comments, post.comments)
                 && Objects.equals(created, post.created)
                 && Objects.equals(author, post.author);
@@ -95,6 +111,6 @@ public class Post {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, desc, comments, created, author);
+        return Objects.hash(id, name, description, comments, created, author);
     }
 }
