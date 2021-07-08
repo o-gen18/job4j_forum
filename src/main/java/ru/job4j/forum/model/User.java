@@ -1,9 +1,7 @@
 package ru.job4j.forum.model;
 
 import javax.persistence.*;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -24,10 +22,10 @@ public class User {
     private boolean enabled;
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
-    private List<Post> posts = new CopyOnWriteArrayList<>();
+    private List<Post> posts = new ArrayList<>();
 
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    private Set<Authority> authorities = ConcurrentHashMap.newKeySet();
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    private Set<Authority> authorities = new HashSet<>();
 
     public static User of(String name) {
         User user = new User();
@@ -127,8 +125,12 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" + "id=" + id + ", username='" + username + '\''
-                + ", password='" + password + '\'' + ", email='" + email
-                + '\'' + ", enabled=" + enabled + ", posts=" + '}' + posts;
+        return "id=" + "User{" + id
+                + ", username='" + username + '\''
+                + ", password='" + password + '\''
+                + ", email='" + email + '\''
+                + ", enabled=" + enabled
+                + ", posts=" + posts
+                + ", authorities=" + authorities + '}';
     }
 }

@@ -41,7 +41,6 @@ public class RegControl {
 
     @PostMapping("/reg")
     public String register(@ModelAttribute User user, Model model) {
-        System.out.println("RegControl trying to save user: " + user);
         user.setEnabled(true);
         user.setPassword(encoder.encode(user.getPassword()));
         user.addAuthority(authorities.findByAuthority("ROLE_USER"));
@@ -52,7 +51,6 @@ public class RegControl {
             "User with such username already exists, please, submit different");
             return reg();
         }
-        System.out.println("All registered users: " + users.getUsers());
         return "redirect:/login";
     }
 }
