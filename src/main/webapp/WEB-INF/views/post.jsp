@@ -11,7 +11,8 @@
 </head>
 <body>
 <div class="container-fluid">
-    <div class="card mx-auto" style="width: 70%">
+    <a href="<c:url value='/'/>" class="btn btn-outline-secondary" style="position: absolute">Home page</a>
+    <div class="card mx-auto border-primary rounded" style="width: 70%">
         <div class="card-body">
             <h5 class="card-title">${post.name}</h5>
             <h6 class="card-subtitle mb-2 text-muted">By: ${post.author.username}</h6>
@@ -23,7 +24,7 @@
                 <th scope="rowgroup">Comments: </th>
                 </thead>
                 <tbody>
-                <c:forEach items="${comments}" var="comment">
+                <c:forEach items="${post.comments}" var="comment">
                     <tr class="table-secondary">
                         <td>
                             <p class="card-text">${comment.text}</p>
@@ -33,10 +34,21 @@
                 </c:forEach>
                 </tbody>
             </table>
-            <a href="#" class="btn btn-outline-warning">leave a comment</a>
+            <form id="commentForm" style="display: none" action="<c:url value="/comment?postId=${post.id}"/>" method="POST">
+                <label for="comment">Your comment: </label>
+                <textarea id="comment" class="form-control" name="text" required></textarea>
+                <input class="btn btn-primary" type="submit" value="Leave a comment">
+            </form>
+            <a id="leaveComment" class="btn btn-outline-warning" onclick="showCommentForm()">leave a comment</a>
         </div>
     </div>
 </div>
+<script>
+    function showCommentForm() {
+        document.getElementById('commentForm').style.display = 'inline';
+        document.getElementById('leaveComment').style.display = 'none';
+    }
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
 

@@ -26,6 +26,10 @@
                         <td><input class="form-control" type="text" name="username"></td>
                     </tr>
                     <tr>
+                        <td>User's email: </td>
+                        <td><input class="form-control" type="email" name="email"></td>
+                    </tr>
+                    <tr>
                         <td>Password: </td>
                         <td><input class="form-control" type="password" name="password"></td>
                     </tr>

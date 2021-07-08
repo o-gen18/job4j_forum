@@ -2,6 +2,7 @@ package ru.job4j.forum.model;
 
 import javax.persistence.*;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @Entity
 @Table(name = "posts")
@@ -15,8 +16,8 @@ public class Post {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @OneToMany
-    private List<Comment> comments;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Comment> comments = new CopyOnWriteArrayList<>();
 
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar created;
@@ -101,16 +102,19 @@ public class Post {
             return false;
         }
         Post post = (Post) o;
-        return Objects.equals(name, post.name)
-                && id == post.id
-                && Objects.equals(description, post.description)
-                && Objects.equals(comments, post.comments)
-                && Objects.equals(created, post.created)
-                && Objects.equals(author, post.author);
+        return id == post.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, comments, created, author);
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "id=" + "Post{" + id
+                + ", name='" + name
+                + '\'' + ", description='" + description
+                + '\'' + ", created=" + created + ", author=" + author.getUsername() + '}';
     }
 }

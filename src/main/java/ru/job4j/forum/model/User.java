@@ -3,6 +3,9 @@ package ru.job4j.forum.model;
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @Entity
 @Table(name = "users")
@@ -10,18 +13,43 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(unique = true)
     private String username;
+
     private String password;
+
+    @Column(unique = true)
     private String email;
     private boolean enabled;
 
-    @OneToMany(mappedBy = "author")
-    private List<Post> posts;
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+    private List<Post> posts = new CopyOnWriteArrayList<>();
+
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    private Set<Authority> authorities = ConcurrentHashMap.newKeySet();
 
     public static User of(String name) {
         User user = new User();
         user.username = name;
+        user.enabled = true;
         return user;
+    }
+
+    public void addAuthority(Authority authority) {
+        authorities.add(authority);
+    }
+
+    public boolean removeAuthority(Authority authority) {
+        return authorities.remove(authority);
+    }
+
+    public void addPost(Post post) {
+        posts.add(post);
+    }
+
+    public boolean removePost(Post post) {
+        return posts.remove(post);
     }
 
     public int getId() {
@@ -72,6 +100,14 @@ public class User {
         this.posts = posts;
     }
 
+    public Set<Authority> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(Set<Authority> authorities) {
+        this.authorities = authorities;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -81,17 +117,12 @@ public class User {
             return false;
         }
         User user = (User) o;
-        return enabled == user.enabled
-                && id == user.id
-                && Objects.equals(username, user.username)
-                && Objects.equals(password, user.password)
-                && Objects.equals(email, user.email)
-                && Objects.equals(posts, user.posts);
+        return id == user.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, password, email, enabled, posts);
+        return Objects.hash(id);
     }
 
     @Override

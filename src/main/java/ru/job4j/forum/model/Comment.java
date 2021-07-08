@@ -11,7 +11,7 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String text;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -20,6 +20,10 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "USER_ID_FK"))
     private User author;
+
+    public Comment() {
+        this.created = Calendar.getInstance();
+    }
 
     public static Comment of(String text, User author) {
         Comment comment = new Comment();
@@ -70,14 +74,11 @@ public class Comment {
             return false;
         }
         Comment comment = (Comment) o;
-        return id == comment.id
-                && Objects.equals(text, comment.text)
-                && Objects.equals(created, comment.created)
-                && Objects.equals(author, comment.author);
+        return id == comment.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, text, created, author);
+        return Objects.hash(id);
     }
 }

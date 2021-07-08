@@ -11,6 +11,7 @@
 </head>
 <body>
 <div class="container-fluid">
+    <a href="<c:url value='/'/>" class="btn btn-outline-secondary" style="position: absolute">Home page</a>
     <div class="card mx-auto border-0" style="width: 50%">
         <h2 class="h2 mx-auto" style="display: inline" align="center">
             <c:choose>

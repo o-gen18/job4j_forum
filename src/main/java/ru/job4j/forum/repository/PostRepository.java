@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface PostRepository extends CrudRepository<Post, Integer> {
     @Override
-    @Query("SELECT DISTINCT p FROM Post as p FULL JOIN FETCH p.comments FULL JOIN FETCH p.author")
+    @Query("SELECT DISTINCT p FROM Post as p FULL JOIN FETCH p.author")
     Iterable<Post> findAll();
 
     @Override
