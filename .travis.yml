@@ -10,3 +10,7 @@ notifications:
       oggen18@gmail.com
     on_success: never
     on_failure: always
+
+env:
+  global:
+    - CODECOV_TOKEN="f4e6786c-51bb-4cdb-b42c-6a65623e46fd"
