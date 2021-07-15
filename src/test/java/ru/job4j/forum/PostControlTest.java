@@ -1,13 +1,23 @@
 package ru.job4j.forum;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.job4j.forum.model.Post;
+import ru.job4j.forum.model.User;
+import ru.job4j.forum.service.PostService;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -18,6 +28,9 @@ public class PostControlTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @MockBean
+    private PostService posts;
 
     @Test
     @WithMockUser
@@ -36,5 +49,34 @@ public class PostControlTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(view().name("edit"));
+    }
+
+    @Test
+    @WithMockUser(username = "Oleg")
+    public void whenSaveThenRedirect() throws Exception {
+        this.mockMvc.perform(post("/save")
+        .param("name", "New BMW for sale."))
+                .andDo(print())
+                .andExpect(status().is3xxRedirection());
+        ArgumentCaptor<Post> argument = ArgumentCaptor.forClass(Post.class);
+        verify(posts).save(argument.capture());
+        assertThat(argument.getValue().getName(), is("New BMW for sale."));
+    }
+
+    @Test
+    @WithMockUser
+    public void whenCommentThenReturnPost() throws Exception {
+        Post post = Post.of("First post");
+        post.setAuthor(User.of("Oleg"));
+        when(posts.findPostById(1)).thenReturn(post);
+
+        this.mockMvc.perform(post("/comment")
+                .param("postId", "1")
+                .param("text", "Commenting"))
+                .andDo(print())
+                .andExpect(status().isOk())
+        .andExpect(view().name("post"));
+
+        assertThat(post.getComments().get(0).getText(), is("Commenting"));
     }
 }
