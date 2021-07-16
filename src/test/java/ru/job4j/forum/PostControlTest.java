@@ -2,15 +2,18 @@ package ru.job4j.forum;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.powermock.api.mockito.PowerMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.job4j.forum.control.PostControl;
 import ru.job4j.forum.model.Post;
 import ru.job4j.forum.model.User;
 import ru.job4j.forum.service.PostService;
+import ru.job4j.forum.service.UserService;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -51,15 +54,21 @@ public class PostControlTest {
                 .andExpect(view().name("edit"));
     }
 
+    @MockBean
+    private UserService users;
+
     @Test
-    @WithMockUser(username = "Oleg")
+    @WithMockUser
     public void whenSaveThenRedirect() throws Exception {
+        PostControl mockPostControl = PowerMockito.spy(new PostControl(posts, users));
+        PowerMockito.when(mockPostControl, "findUserByPrincipal").thenReturn(User.of("Robert"));
         this.mockMvc.perform(post("/save")
         .param("name", "New BMW for sale."))
                 .andDo(print())
                 .andExpect(status().is3xxRedirection());
         ArgumentCaptor<Post> argument = ArgumentCaptor.forClass(Post.class);
         verify(posts).save(argument.capture());
+        assertThat(argument.getValue().getAuthor().getUsername(), is("Robert"));
         assertThat(argument.getValue().getName(), is("New BMW for sale."));
     }
 
