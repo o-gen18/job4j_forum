@@ -35,6 +35,9 @@ public class PostControlTest {
     @MockBean
     private PostService posts;
 
+    @MockBean
+    private UserService users;
+
     @Test
     @WithMockUser
     public void whenPostThenReturnPost() throws Exception {
@@ -53,9 +56,6 @@ public class PostControlTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("edit"));
     }
-
-    @MockBean
-    private UserService users;
 
     @Test
     @WithMockUser
