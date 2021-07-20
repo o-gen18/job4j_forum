@@ -27,12 +27,13 @@ public class RegControl {
         this.authorities = authorities;
     }
 
-    @EventListener
-    public void appReady(ApplicationReadyEvent event) {
-        if (authorities.findByAuthority("ROLE_USER") == null) {
-            authorities.save(Authority.of("ROLE_USER"));
-        }
-    }
+    //This logic is implemented in insert.sql file.
+//    @EventListener
+//    public void appReady(ApplicationReadyEvent event) {
+//        if (authorities.findByAuthority("ROLE_USER") == null) {
+//            authorities.save(Authority.of("ROLE_USER"));
+//        }
+//    }
 
     @GetMapping("/reg")
     public String reg() {
