@@ -1,34 +1,25 @@
 language: java
 jdk:
-  - openjdk15
-
+- openjdk15
 sudo: false
-
 install: true
-
 script: mvn clean package -DskipTests=true
-
 services:
-  - postgresql
-
+- postgresql
 before_install:
-  - psql -c 'create database forum;' -U postgres
-
+- psql -c 'create database forum;' -U postgres
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
-
+- bash <(curl -s https://codecov.io/bash)
 notifications:
   email:
-    recipients:
-      oggen18@gmail.com
+    recipients: oggen18@gmail.com
     on_success: never
     on_failure: always
-
 env:
   global:
-    - CODECOV_TOKEN="f4e6786c-51bb-4cdb-b42c-6a65623e46fd"
+  - CODECOV_TOKEN="f4e6786c-51bb-4cdb-b42c-6a65623e46fd"
 deploy:
   provider: heroku
   api_key:
-    secure: 13m2LXUJCEl41OTKcfi9uKymXnuc9bteSshgnhklKQDKFZ0xB2MmT1XOBmElOhpCd8/SNAmmZu6sf2PRj0uNLOs15oAlX0ioQ4hFy2BxqJG2pMGFdW+8wW5y1GCR1/qfI6RjxWAdwC2r8I8OYEGJGodF247OiFY1DDNiS9dUqpsVUWp64+ZdYqh2DqBiOI2ubaNdIYlN3al6HR9wIbbH82sj2wa908/nB2nsAR/5PXi5aW3b2N5G75TpsdNrnXIEJ7pd6sniyPpuf9WBnqWT24dFiriHi2t/7NvYkBaLDPAPcrJeir0gRqwqWS/NuMCtM3MlT1X5WSi08tEIcY8VTWD3tI7RALYiKFWDKSug29YO7gEkIqrOu9KhAess9rx93bWXDJLlcCODmcRqc1YQ/aeBJ/L4d6/hrPGmyBiex7cw0SnjD1zn2I0BTfWuLiRB+wj6HdfqwRn+IH4/uW4V4wZhoDcAPGlx2efjn6M9nKiElaFl7iKmZ2hUV/8iDURelnBhjQGHjIRY2jEPIeLd6hLYlR3l38E0Rkjd1xsGHrf3JYB3yh6jra1rfiiTCleDCyPFaLdL5EFr6QaaX3ffNOkd+H/Xs/WvJ0lGzHFtambt0bcpX3FkzmQW1W6A9Iyb73PmX9L+EEMtqpOs8Nxqh2mbvRygircJwAZ6p9U5m64=
+    secure: XlZG63vj6HtLqp3gR26AN9iFflbNuoG4hxEkb5+JNE/FT4EWrrdIwvlGZf/84E+6DkPB7+o2iSVIHkLYNEz5lvkclzmTtHI36gsN2BXWLm0/gV+PMGifqVLxMGy6NiU022mk0WFHBeZv6XIeHEjK134q77z3H/bxyklGTPP1igCpyHX17rty+fBAips20+l+iHulPFd5pnlemt01+7kyXM6Xvy2+becm0B3LeckbH0R+BVN+G43ukowA3UJXDNdQDEQZevLhvXf1p16Vsgm+AkJWevxktbaazt5hbkefelnOREZcMPlcUUnXXtRn/qppa3b/ZD4dh6L4U1iflPoZPtIYMMjNDzrUxdW0zklsSr9b3EVafTuzNc0SONk7hl1fcKBs24RfbHUFaKNW3zLvKYJZTANcTOz9WA09NSEjifmaxF63QBmox4bmYYkTHk3gq/E4hZ8EKLQ9O+1kSDDe4AUPkc0T8IDpvibU5akyr96pHIINxQeV3Sawj2uOs9S3RuXRN40fz3BVVat1x4AMN0tg2zngUx73rYByG+uJLBcIG9VrudC1FTX75UYnXPkO/OyA3+LD1D6cA1FkuboeGk7rzFoMlSfy+w//WkLS8Lq4jLVd01yXWCHsnif2whcLHCpPs6CmkCrOQnPLD5BpqgYrPpWmSOQGfrnE1QK+XaU=
     app: dry-plains-15881
