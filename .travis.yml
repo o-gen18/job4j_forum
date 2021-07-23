@@ -4,12 +4,15 @@ jdk:
 
 sudo: false
 
+install: true
+
+script: mvn clean package -DskipTests=true
+
 services:
   - postgresql
 
 before_install:
   - psql -c 'create database forum;' -U postgres
-
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
@@ -24,3 +27,8 @@ notifications:
 env:
   global:
     - CODECOV_TOKEN="f4e6786c-51bb-4cdb-b42c-6a65623e46fd"
+deploy:
+  provider: heroku
+  api_key:
+    secure: EB4RXT6Uqb6mP3q+XrtdVjiz+sPCogp7mXyS65b/DJEMN7WnSlD2uY8gFI2CiPA7+tFErgHTFXb0nk04SbBYM2Jejt2XoomzCGQ5FRBgjtOm7ZA692J3lsAL77Ak7tQmT5zSaWgVbQ7Qzj33KyfzHBSfDJJgxHENcWUdWtsuWivw+4DMurBefNpWD/yzwNI4Go7RPhDW1cpecNr1ZeZ4omgM56T3rYmKPgB17eHKIa+lQIh5oj0Fmi/iUAW1eQET8jY5dvpIsFllHB5wYUYy8fvOwu7d+WMqVwe5nViRpD20IUGNrXZLcFywR5SnP+rWpTEQL0PkdeHSNnzkd4He9q2xMi1CQlcW2eZ24vMcxdC63BRX7mC5yv4oJEBsZV2DvQbGEDVAlKV0hPrddySkaQi3rWgBqQiOMaOfGI1kHuO2aNG0NyQKeZN8lRoDgfopdR61U3Q3IEaZbm7CQZDq0GiZ7Px6LnQf5lc/GZQ1U7hSLxIRJVO3LkJnbq1DPD1y6jzBsLW3YUji8pwJG/Qlb/SiU5v25rzs/goU12e87ZU0fnEt/fzeVBX2sPjrsG4Uw+aePdf2Iq45tn+uV8hHBQPTC6ZSEljUXgwqF5hnN52O2So5IlkugrdnZyLBXqLWUGhdZVnZRO2I7FYNVmLjkzT835Xy7yQHa8TYWWBn6dI=
+    app: dry-plains-15881
