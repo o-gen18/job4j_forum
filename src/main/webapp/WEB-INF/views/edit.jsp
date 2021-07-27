@@ -31,12 +31,12 @@
                     </c:if>
                     <tr>
                         <td>Post's name: </td>
-                        <td><input class="form-control" type="text" name="name" value="<c:out value='${post.name}'/>"></td>
+                        <td><input class="form-control" type="text" name="name" value="<c:out value='${post.name}'/>" required></td>
                     </tr>
                     <tr>
                         <td>Description: </td>
                         <td>
-                            <textarea class="form-control" name="description"><c:out value='${post.description}'/></textarea>
+                            <textarea class="form-control" name="description" required><c:out value='${post.description}'/></textarea>
                         </td>
                     </tr>
                     <tr>
